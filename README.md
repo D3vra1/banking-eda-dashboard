@@ -46,6 +46,20 @@ Synthetic banking dataset (Kaggle) — 7 relational tables, 1.26M+ records:
 - Range validation (credit scores 300–850, no negative balances/transactions)
 - Categorical consistency checks (account_type, card_type, city)
 
+## 🚀 v2.0 Feature Drop: GenAI NL-to-SQL Data Agent
+
+I iterated on this project to bridge the gap between complex relational databases and non-technical business stakeholders. I engineered a localized Natural Language Processing (NLP) pipeline that allows users to query this 1.26M record database using plain English.
+
+### Technical Architecture
+* **LLM Engine:** Llama-3.3-70B architecture accessed via the ultra-low latency **Groq Cloud API**.
+* **Data Interface:** Integrated **Python (PyODBC + Pandas)** to establish secure backend communication directly with **SQL Server**.
+* **Query Translation Layer:** Engineered contextual system prompts (`SCHEMA_PROMPT`) passing metadata definitions of `dbo.loans`, `dbo.customers`, etc., forcing the LLM to strictly output deterministic, syntax-perfect T-SQL statements.
+
+### How It Works (Sample Execution)
+1. **User Input:** *"Show me the average loan amount and average interest rate."*
+2. **GenAI Translation:** `SELECT AVG(loan_amount), AVG(interest_rate) FROM dbo.loans`
+3. **Database Execution:** PyODBC handles the connection to `MANINDERPALKAUR\bank`, executes the code, and cleanly prints the live analytical matrix inside the execution environment via a Pandas DataFrame.
+
 ## Dashboard
 **Page 1 — Transaction Trends:** KPI summary, monthly volume trend (2019–2025),
 top 10 accounts by spend.
